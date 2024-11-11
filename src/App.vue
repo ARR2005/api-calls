@@ -1,20 +1,32 @@
 <template>
-  <div class="bg-grey w-screen h-screen">
-    <H1>{{  title }}</H1>
+  <div id="app">
+    <ValorantApi @agents-fetched="handleAgentsFetched" />
+    <AgentsList v-if="agents.length" :agents="agents" />
   </div>
 </template>
 
 <script>
-  export default {
-    components: [],
-    data() {
-      return {
-        title: 'try',
-      }
+import ValorantApi from './assets/Valorant_Api.vue';
+import AgentsList from './components/icons/AgentsList.vue';
+
+export default {
+  components: {
+    ValorantApi,
+    AgentsList,
+  },
+  data() {
+    return {
+      agents: [],
+    };
+  },
+  methods: {
+    handleAgentsFetched(agents) {
+      this.agents = agents; // Store the fetched agents data
     },
-  }
+  },
+};
 </script>
 
-<style scoped>
-
+<style>
+/* Add any global styles you want here */
 </style>
