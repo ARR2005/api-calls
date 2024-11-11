@@ -1,25 +1,39 @@
 <template>
-    <div class=" relative flex flex-row bg-slate-700 w-screen h-screen">
-        <button @click="prevPage" :disabled="currentPage === 1" class="pagination-button">Previous</button>
+    <div class=" relative flex flex-col bg-slate-600 w-screen h-screen">
         <div v-for="agent in paginatedAgents" 
             :key="agent.uuid + (agent.isPlayableCharacter === true)"
             class='m-5 flex flex-row'>
-            <div > 
+            <div> 
                 <h1 class="text-6xl bg-gradient-to-t from-red-600 via-transparent to-transparent bg-[length:20%_100%]"> 
                     {{ agent.displayName }} 
                 </h1>
                 <p class="text-2xl max-w-[px]"> 
                     {{ agent.description }} 
                 </p>
-            </div>
-                <div class="absolute bottom-0 right-0 w-[40%] ">
-                    <img :src="agent.fullPortrait" alt="Agent Portrait" class="agent-portrait-img" />
+                <div>
+                    <ul class="list-image-none">
+                        <li v-for="skill in agent.abilities" :key="skill.slot" class="skill-item flex items-center">
+                            <img :src="skill.displayIcon" alt="Ability Icon" class="w-20" />
+                            <div class="flex fle-col text-1xl">
+                                <span class="ml-2">
+                                    {{ skill.displayName }}
+                                </span>
+                                <span class="w-[800px]">
+                                    {{ skill.description }}
+                                </span> 
+                            </div>
+                        </li>
+                    </ul>
                 </div>
+            </div>
 
+            <div class="absolute bottom-0 right-0 w-[40%] ">
+                <img :src="agent.fullPortrait" alt="Agent Portrait" class="agent-portrait-img" />
+            </div>
         </div>
-
-        <button @click="nextPage" :disabled="currentPage === totalPages" class="pagination-button">Next</button>
-    </div>
+            <button @click="prevPage" :disabled="currentPage === 1" class="pagination-button">Previous</button>
+            <button @click="nextPage" :disabled="currentPage === totalPages" class="pagination-button">Next</button>
+        </div>
 </template>
 
 <script>
@@ -63,8 +77,8 @@ export default {
 
 <style>
     .bg-image {
-        background-image: url('./assets/valorantBackground.png'); /* Set the background image */
-        background-size: cover; /* Cover the entire container */
-        background-position: center; /* Center the background image */
+        background-image: url('./assets/valorantBackground.png'); 
+        background-size: cover; 
+        background-position: center;
     }
 </style>
