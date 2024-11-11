@@ -1,22 +1,24 @@
 <template>
-    <div class="background">
-        <h1 class="title">Valorant Agents</h1>
-        <div class="agent-grid">
-            <router-link v-for="agent in paginatedAgents" :key="agent.uuid"
-                :to="{ name: 'AgentDetails', params: { id: agent.uuid } }" class="agent-card">
-                <div class="agent-portrait">
-                    <img :src="agent.displayIcon" alt="Agent Icon" class="agent-icon" />
+    <div class=" relative flex flex-row bg-slate-700 w-screen h-screen">
+        <button @click="prevPage" :disabled="currentPage === 1" class="pagination-button">Previous</button>
+        <div v-for="agent in paginatedAgents" 
+            :key="agent.uuid + (agent.isPlayableCharacter === true)"
+            class='m-5 flex flex-row'>
+            <div > 
+                <h1 class="text-6xl bg-gradient-to-t from-red-600 via-transparent to-transparent bg-[length:20%_100%]"> 
+                    {{ agent.displayName }} 
+                </h1>
+                <p class="text-2xl max-w-[px]"> 
+                    {{ agent.description }} 
+                </p>
+            </div>
+                <div class="absolute bottom-0 right-0 w-[40%] ">
                     <img :src="agent.fullPortrait" alt="Agent Portrait" class="agent-portrait-img" />
-                    <h3 class="agent-name">{{ agent.displayName }}</h3>
                 </div>
-            </router-link>
+
         </div>
 
-        <div class="pagination">
-            <button @click="prevPage" :disabled="currentPage === 1" class="pagination-button">Previous</button>
-            <span class="pagination-info">Page {{ currentPage }} of {{ totalPages }}</span>
-            <button @click="nextPage" :disabled="currentPage === totalPages" class="pagination-button">Next</button>
-        </div>
+        <button @click="nextPage" :disabled="currentPage === totalPages" class="pagination-button">Next</button>
     </div>
 </template>
 
@@ -31,16 +33,17 @@ export default {
     data() {
         return {
             currentPage: 1,
-            agentsPerPage: 6,
+            agentsPerPage: 1,
         };
     },
     computed: {
         totalPages() {
-            return Math.ceil(this.agents.length / this.agentsPerPage);
+            return Math.ceil(this.agents.filter(agent => agent.isPlayableCharacter).length / this.agentsPerPage);
         },
         paginatedAgents() {
-            const start = (this.currentPage - 1) * this.agentsPerPage;
-            return this.agents.slice(start, start + this.agentsPerPage);
+        const playableAgents = this.agents.filter(agent => agent.isPlayableCharacter);
+        const start = (this.currentPage - 1) * this.agentsPerPage;
+        return playableAgents.slice(start, start + this.agentsPerPage);
         },
     },
     methods: {
@@ -59,5 +62,9 @@ export default {
 </script>
 
 <style>
-/* Your existing styles */
+    .bg-image {
+        background-image: url('./assets/valorantBackground.png'); /* Set the background image */
+        background-size: cover; /* Cover the entire container */
+        background-position: center; /* Center the background image */
+    }
 </style>
